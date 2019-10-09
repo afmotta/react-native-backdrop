@@ -247,6 +247,8 @@ class Backdrop extends Component {
     } = this.props;
     const { backdropHeight } = this.state;
 
+    const isShowing = (backdropHeight && visible) || closedHeight
+
     let opacityAnimation = backdropHeight
       ? this._transitionY.interpolate({
           inputRange: [40, backdropHeight - closedHeight],
@@ -264,7 +266,7 @@ class Backdrop extends Component {
               opacity: opacityAnimation
             }
           ]}
-          pointerEvents={visible ? "auto" : "none"}
+          pointerEvents={isShowing ? "auto" : "none"}
         >
           <TouchableOpacity
             style={styles.overlayTouchable}
@@ -278,7 +280,7 @@ class Backdrop extends Component {
           style={[
             styles.contentContainer,
             {
-              opacity: backdropHeight && visible ? 1 : 0, // Hide before layout prevents blink
+              opacity: isShowing ? 1 : 0, // Hide before layout prevents blink
               transform: [
                 {
                   translateY: this._transitionY
@@ -288,7 +290,7 @@ class Backdrop extends Component {
           ]}
         >
           <View
-            pointerEvents={backdropHeight && visible ? 'auto' : 'none'}
+            pointerEvents={isShowing ? 'auto' : 'none'}
             style={[
               styles.container,
               { paddingBottom: this.props.paddingBottom + 12 },
